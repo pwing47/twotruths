@@ -34,6 +34,9 @@ button {
    
 }
 
+.starter-label {
+  @apply inline-block bg-white border-gray-900 mx-1 rounded-full px-5 py-3 mb-2;
+}
 
 .radio-label {
 

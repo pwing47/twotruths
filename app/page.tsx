@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 
 type Entry = {
@@ -22,43 +22,62 @@ const options = [
   { label: 'Lie', value: 'lie' }
 ];
 
-  // Load from localStorage
-  useEffect(() => {
-    const stored = localStorage.getItem('entries');
-    
-    if(stored) {
-      setEntries(JSON.parse(stored));
-    }
-  }, []);
+const starters = [
+  { label: 'I have', value: 'ihave' },
+  { label: 'I have never', value: 'ihavenever' },
+  { label: 'I once', value: 'ionce' },
+  { label: 'I can', value: 'ican' },
+  { label: 'I am', value: 'iam' },
+  { label: 'I was', value: 'iwas' }
+];
 
-  // Save to localStorage
-  useEffect(() => {
-    localStorage.setItem('entries', 
-      JSON.stringify(entries))
-  }, [entries]);
+// Load from localStorage
+useEffect(() => {
+  const stored = localStorage.getItem('entries');
+  
+  if(stored) {
+    setEntries(JSON.parse(stored));
+  }
+}, []);
 
-  const addEntry = () => {
-    if(!text.trim()) return
-    const newEntry = { id: uuidv4(), text: text.trim(), type }
-    setEntries(prev => [...prev, newEntry])
-    setText("");
+// Save to localStorage
+useEffect(() => {
+  localStorage.setItem('entries', 
+    JSON.stringify(entries))
+}, [entries]);
+
+const addEntry = () => {
+  if(!text.trim()) return
+  const newEntry = { id: uuidv4(), text: text.trim(), type }
+  setEntries(prev => [...prev, newEntry])
+  setText("");
+}
+
+const generateSet = () => {
+  const truths = entries.filter(e => e.type === 'truth');
+  const lies = entries.filter(e => e.type === 'lie');
+
+  if(truths.length < 2 || lies.length < 1) {
+    alert("Need at least 2 truths and 1 lie");
+    return;
   }
 
-  const generateSet = () => {
-    const truths = entries.filter(e => e.type === 'truth');
-    const lies = entries.filter(e => e.type === 'lie');
+  const pickRandom = (arr: Entry[], n: number) => [...arr].sort(() => 0.5 - Math.random()).slice(0,n);
 
-    if(truths.length < 2 || lies.length < 1) {
-      alert("Need at least 2 truths and 1 lie");
-      return;
-    }
+  const set = [...pickRandom(truths, 2), ...pickRandom(lies, 1)].sort(() => 0.5 - Math.random());
 
-    const pickRandom = (arr: Entry[], n: number) => [...arr].sort(() => 0.5 - Math.random()).slice(0,n);
+  setRandomSet(set);
+}
 
-    const set = [...pickRandom(truths, 2), ...pickRandom(lies, 1)].sort(() => 0.5 - Math.random());
+const inputRef = useRef<HTMLInputElement | null>(null);
 
-    setRandomSet(set);
-  }
+const setInputText = (textValue: string) => {
+  setText(textValue);
+
+  
+       inputRef.current?.focus();
+     
+}
 
   return (
     
@@ -89,11 +108,15 @@ const options = [
 
       <div className="fixed w-full bottom-0 text-center pb-6">
 
-        <div className="flex flex-col w-full justify-center items-center">
-          <div onTouchEnd={e => {e.preventDefault(); alert('I have...')}} className="inline bg-white border-gray-900 rounded-full p-3 mb-2">I have...</div>
-          <div onTouchEnd={e => e.preventDefault()} className="inline bg-white border-gray-900  rounded-full p-3 mb-2">I have never...</div>
+        <div className="w-95/100 justify-self-center mb-4">
+          
+          {starters.map((starter) => (
+            <div key={starter.value} onTouchEnd={e => {e.preventDefault(); setInputText(`${starter.label} `)}} className="starter-label">{starter.label}...</div>
+        
+          ))}
         </div>
 
+        
         
 
         <div className="flex flex-wrap w-full justify-center">
@@ -115,7 +138,7 @@ const options = [
                   ))}
 
             </div>
-            <input type="text" value={text} onChange={e => setText(e.target.value)} placeholder={`Enter a new ${type}...`} className="w-9/10 rounded-lg border border-1 border-gray-200 bg-white tracking-tight font-extrabold px-8 py-10"></input> 
+            <input type="text" ref={inputRef} value={text} onChange={e => setText(e.target.value)} placeholder={`Enter a new ${type}...`} className="w-9/10 rounded-lg border border-1 border-gray-200 bg-white tracking-tight font-extrabold px-8 py-10"></input> 
 
               <button onClick={addEntry} className="bg-blue-600 mt-2">Add New {type}</button>
 
