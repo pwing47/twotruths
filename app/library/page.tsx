@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { useEffect, useState } from 'react'
 
 type Entry = {
@@ -24,6 +25,8 @@ export default function Library() {
   return (
     
       <main className="flex items-center flex-col w-full">
+
+        <Link className='absolute l-0 t-0' href="/">&lt; Home</Link>
 
 
         <ul className="flex flex-col w-9/10 mt-6">

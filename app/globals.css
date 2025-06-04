@@ -5,9 +5,41 @@
   background-size: cover;
   min-height: 100%;
 
-  background: linear-gradient(#f9f9f9, #e0f2d5);
+  background: linear-gradient(#fefefe, #e0f2d5);
+  background: #fafafa;
 }
 
 body {
   
+}
+
+header {
+  
+
+  color: #fff;
+
+background: #e9d4ff;
+background: linear-gradient(140deg, rgba(233, 212, 255, 1) 0%, rgba(188, 133, 255, 1) 100%);  
+}
+
+main {
+  
+}
+
+button {
+  @apply w-9/10  capitalize rounded-full p-4 font-bold tracking-tight text-lg shadow-xl/5;
+
+  background: #C1E5D9;
+  background: linear-gradient(0deg, rgba(193, 229, 217, 1) 0%, rgba(230, 255, 235, 1) 100%);
+   
+}
+
+
+.radio-label {
+
+  @apply border-b-2 border-slate-300 tracking-tight inline-block py-2 px-10 w-40 text-center;
+
+  &.active {
+    @apply font-extrabold border-slate-600;
+  }
 }

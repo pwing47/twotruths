@@ -17,6 +17,11 @@ export default function Library() {
   const [entries, setEntries] = useState<Entry[]>([]);
   const [randomSet, setRandomSet] = useState<Entry[] | null>(null);
 
+const options = [
+  { label: 'Truth', value: 'truth' },
+  { label: 'Lie', value: 'lie' }
+];
+
   // Load from localStorage
   useEffect(() => {
     const stored = localStorage.getItem('entries');
@@ -57,40 +62,61 @@ export default function Library() {
 
   return (
     
-
+<div className="h-full">
       
 
-      <main className="flex flex-col w-full items-center">
-
-        <div className="flex flex-wrap w-full justify-center">
-              <div className="w-full text-center">Enter a New</div>
-              <select value={type} onChange={e => setType(e.target.value as 'truth' | 'lie')} className='p-2 rounded flex'>
-                <option className="w-50" value="truth">Truth</option>
-                <option className="w-50" value="lie">Lie</option>
-              </select>
-            </div>
+      <main className="flex flex-col w-full items-center -mt-8 rounded-full">
 
         
-        <input type="text" value={text} onChange={e => setText(e.target.value)} placeholder="Enter a statement..." className="w-9/10 rounded-full bg-white tracking-tight font-extrabold px-15 py-10"></input>
-
         
 
-        <button onClick={addEntry} className="bg-blue-600 text-white rounded capitalize">Add New {type}</button>
-
-        <button onClick={generateSet} className="bg-green-600 text-white rounded">Generate Random Set</button>
+        
+        <button onClick={generateSet} className="text-slate-900 mt-0">Generate Random Set</button>
 
         {
           randomSet && (
-            <div className="space-y-3 mb-8">              
+            <div className="w-9/10 flex flex-col mt-6">              
               {randomSet.map(entry => (
-                <div key={entry.id} className="bg-gray-100 p-3 rounded shadow">{entry.text}</div>
+                <div key={entry.id} className="flex w-full bg-white/80 rounded-sm shadow-lg/5 p-3 mt-3 mb-1 items-center">{entry.text}</div>
               ))}
             </div>
           )
         }
 
-        <Link href="/library">View My Library &gt;</Link>
+        <Link className="mt-8" href="/library">View My Library &gt;</Link>
 
       </main>
+
+      <div className="fixed w-full bottom-0 text-center pb-6">
+
+        <div className="flex flex-wrap w-full justify-center">
+              
+
+            {options.map((option) => (
+                    <div key={option.value}>
+                      <input
+                        className="font-inherit tracking-tight appearance-none"
+                        type="radio"
+                        id={option.value}
+                        name="dynamicRadio"
+                        value={option.value}
+                        checked={type === option.value}
+                        onChange={e => setType(e.target.value as 'truth' | 'lie')}
+                      />
+                      <label className={` ${type === option.value ? `active` : ``} radio-label font-[Inter]`} htmlFor={option.value}>{option.label}</label>
+                    </div>
+                  ))}
+
+            </div>
+            <input type="text" value={text} onChange={e => setText(e.target.value)} placeholder={`Enter a new ${type}...`} className="w-9/10 rounded-lg border border-1 border-gray-200 bg-white tracking-tight font-extrabold px-8 py-10"></input> 
+
+              <button onClick={addEntry} className="bg-blue-600 mt-2">Add New {type}</button>
+
+
+      </div>
+
+      
+
+      </div>
   );
 }

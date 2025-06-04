@@ -21,7 +21,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${inter.variable} antialiased`}>
 
-        <header>
+        <header className="pt-8 pb-16">
             <h1 className="text-center tracking-tight">
               <span className="text-2xl font-extrabold uppercase">Two Truths</span><br/>
               <span className="text-4xl">Library</span>
