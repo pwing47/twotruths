@@ -89,6 +89,13 @@ const options = [
 
       <div className="fixed w-full bottom-0 text-center pb-6">
 
+        <div className="flex flex-col w-full justify-center items-center">
+          <div onTouchEnd={e => {e.preventDefault(); alert('I have...')}} className="inline bg-white border-gray-900 rounded-full p-3 mb-2">I have...</div>
+          <div onTouchEnd={e => e.preventDefault()} className="inline bg-white border-gray-900  rounded-full p-3 mb-2">I have never...</div>
+        </div>
+
+        
+
         <div className="flex flex-wrap w-full justify-center">
               
 
